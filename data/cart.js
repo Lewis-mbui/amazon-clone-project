@@ -7,6 +7,16 @@ export let cart = JSON.parse(localStorage.getItem('cart')) ||
     quantity: 1
   }];
 
+export function calculateCartQuantity() {
+  let cartQuantity = 0;
+
+  cart.forEach((cartItem) => {
+    cartQuantity += cartItem.quantity;
+  });
+
+  return cartQuantity;
+}
+
 function saveToStorage() {
   localStorage.setItem('cart', JSON.stringify(cart));
 }
