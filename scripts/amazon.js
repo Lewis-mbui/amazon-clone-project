@@ -5,6 +5,7 @@ import { formatCurrency } from './utils/money.js';
 updateCartQuantity();
 
 let productsHTML = ``;
+let timeoutId;
 
 products.forEach((product) => {
   productsHTML += `
@@ -47,7 +48,7 @@ products.forEach((product) => {
 
       <div class="product-spacer"></div>
 
-      <div class="added-to-cart">
+      <div class="js-added-to-cart-${product.id} added-to-cart">
         <img src="images/icons/checkmark.png" />
         Added
       </div>
@@ -80,11 +81,19 @@ function updateCartQuantity() {
 document.querySelectorAll('.js-add-to-cart')
   .forEach((button) => {
     button.addEventListener('click', () => {
-      const productId = button.dataset.productId;
+      const {productId} = button.dataset;
       const quantity = Number(document.querySelector(`.js-quantity-selector-${productId}`)
         .value);
 
       addToCart(productId, quantity);
       updateCartQuantity();
+
+      const addedMessage = document.querySelector(`.js-added-to-cart-${productId}`);
+      addedMessage.classList.add('is-visible');
+
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        addedMessage.classList.remove('is-visible');
+      }, 2000);
     })
   });
