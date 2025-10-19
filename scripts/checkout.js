@@ -1,9 +1,42 @@
-import {cart, removeFromCart, updateCartQuantity} from '../data/cart.js';
+import {cart, removeFromCart, updateCartQuantity, updateDeliveryOption} from '../data/cart.js';
 import {products} from '../data/products.js';
 import { formatCurrency } from './utils/money.js';
 import { calculateCartQuantity } from '../data/cart.js';
 import dayjs from 'https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js'
 import { deliveryOptions } from '../data/deliveryOptions.js';
+
+function updateItemsLink() {
+  const cartQuantity = calculateCartQuantity();
+
+  document.querySelector('.js-return-to-home-link')
+    .innerHTML = `${cartQuantity} items`;
+}
+
+function handleSaveQuantity(productId) {
+  const newQuantity = Number(document.querySelector(`.js-quantity-input-${productId}`)
+      .value);
+
+  if (newQuantity <= 0 || newQuantity >= 1000) {
+    alert('Quantity must be greater than 0 and less than 1000');
+    removeIsEditingClass(productId);
+    return;
+  }
+  
+  updateCartQuantity(productId, newQuantity);
+  updateItemsLink();
+
+  document.querySelector(`.js-quantity-label-${productId}`)
+    .innerHTML = newQuantity;
+
+  removeIsEditingClass(productId);
+}
+
+function removeIsEditingClass(productId) {
+  const container = document.
+      querySelector(`.js-cart-item-container-${productId}`);
+
+  container.classList.remove('is-editing-quantity');
+}
 
 updateItemsLink();
 
@@ -123,7 +156,9 @@ function deliverOptionsHTML(matchingProduct, cartItem) {
     const isChecked = deliveryOption.id === cartItem.deliveryOptionId;
 
     html +=`
-      <div class="delivery-option">
+      <div class="delivery-option js-delivery-option"
+        data-product-id="${matchingProduct.id}"
+        data-delivery-option-id="${deliveryOption.id}">
         <input
           type="radio"
           ${isChecked ? 'checked' : ''}
@@ -192,35 +227,10 @@ document.querySelectorAll('.quantity-input')
     })
   });
 
-function updateItemsLink() {
-  const cartQuantity = calculateCartQuantity();
-
-  document.querySelector('.js-return-to-home-link')
-    .innerHTML = `${cartQuantity} items`;
-}
-
-function handleSaveQuantity(productId) {
-  const newQuantity = Number(document.querySelector(`.js-quantity-input-${productId}`)
-      .value);
-
-  if (newQuantity <= 0 || newQuantity >= 1000) {
-    alert('Quantity must be greater than 0 and less than 1000');
-    removeIsEditingClass(productId);
-    return;
-  }
-  
-  updateCartQuantity(productId, newQuantity);
-  updateItemsLink();
-
-  document.querySelector(`.js-quantity-label-${productId}`)
-    .innerHTML = newQuantity;
-
-  removeIsEditingClass(productId);
-}
-
-function removeIsEditingClass(productId) {
-  const container = document.
-      querySelector(`.js-cart-item-container-${productId}`);
-
-  container.classList.remove('is-editing-quantity');
-}
+document.querySelectorAll('.js-delivery-option')
+  .forEach((element) => {
+    element.addEventListener('click', () => {
+      const {productId, deliveryOptionId} = element.dataset;
+      updateDeliveryOption(productId, deliveryOptionId);
+    });
+  });
