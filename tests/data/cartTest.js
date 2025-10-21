@@ -115,4 +115,11 @@ describe('test suite: updateDeliveryOption', () => {
     expect(cart.length).toEqual(2);
     expect(cart[0].deliveryOptionId).toEqual('3');
   })
+
+  it('does nothing if the product is not in the cart', () => {
+    updateDeliveryOption('does-not-exist', '3');
+
+    expect(cart.length).toEqual(2);
+    expect(cart[0].productId).toEqual('e43638ce-6aa0-4b85-b27f-e1d07eb678c6');
+  });
 });
