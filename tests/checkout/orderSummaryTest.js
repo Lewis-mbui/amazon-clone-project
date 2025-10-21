@@ -1,5 +1,6 @@
 import { renderOrderSummary } from "../../scripts/checkout/orderSummary.js";
 import { loadFromStorage, cart } from "../../data/cart.js";
+import { getProduct } from "../../data/products.js";
 
 
 describe('test suite: renderOrderSummary', () => {
@@ -33,6 +34,11 @@ describe('test suite: renderOrderSummary', () => {
     renderOrderSummary();
   });
 
+  afterEach(() => {
+    document.querySelector('.js-test-container')
+      .innerHTML = '';
+  });
+
   it('displays the cart', () => {
     expect(
       document.querySelectorAll('.js-cart-item-container').length
@@ -44,9 +50,11 @@ describe('test suite: renderOrderSummary', () => {
     expect(document.querySelector(`.js-product-quantity-${productId2}`).innerText
     ).toContain('Quantity: 1');
 
-    document.querySelector('.js-test-container')
-      .innerHTML = '';
-
+    expect(document.querySelector(`.js-product-name-${productId1}`).innerText
+      ).toEqual(getProduct(productId1).name);
+    
+    expect(document.querySelector(`.js-product-name-${productId2}`).innerText
+      ).toEqual(getProduct(productId2).name);
   });
 
   it('removes a product', () => {
@@ -66,8 +74,5 @@ describe('test suite: renderOrderSummary', () => {
 
     expect(cart.length).toEqual(1);
     expect(cart[0].productId).toEqual(productId2);
-
-    document.querySelector('.js-test-container')
-      .innerHTML = '';
   });
 });
