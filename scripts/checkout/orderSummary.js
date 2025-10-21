@@ -98,7 +98,7 @@ export function renderOrderSummary() {
                 data-product-id="${matchingProduct.id}"
               />
 
-              <span class="save-quantity-link link-primaryjs-save-link" 
+              <span class="save-quantity-link link-primary js-save-link" 
                 data-product-id="${matchingProduct.id}"
               >
                 Save
@@ -198,6 +198,7 @@ export function renderOrderSummary() {
       link.addEventListener('click', () => {
         const {productId} = link.dataset;
         handleSaveQuantity(productId);
+        renderPaymentSummary();
       });
     });
 
