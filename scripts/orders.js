@@ -47,11 +47,15 @@ function renderOrdersGrid() {
         </div>
 
         <div class="product-actions">
-          <a href="tracking.html">
-            <button class="track-package-button button-secondary">
+
+          <a href="tracking.html?orderId=${order.id}&productId=${productId}">
+            <button class="track-package-button 
+              button-secondary"
+            >
               Track package
             </button>
           </a>
+
         </div>
       `;
     });
@@ -107,6 +111,14 @@ function renderOrdersGrid() {
 
         document.querySelector('.js-cart-quantity')
           .innerHTML = calculateCartQuantity();
+
+        button.innerHTML = 'Added';
+        setTimeout(() => {
+          button.innerHTML = `
+            <img class="buy-again-icon" src="images/icons/buy-again.png">
+            <span class="buy-again-message">Buy it again</span>
+          `;
+        }, 1000);
       });
     })
 }
