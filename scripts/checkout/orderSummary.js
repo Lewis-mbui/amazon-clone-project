@@ -137,7 +137,7 @@ export function renderOrderSummary() {
                 <span class="quantity-label js-quantity-label-${matchingProduct.id}">${cartItem.quantity}</span> 
               </span>
 
-              <span class="update-quantity-link link-primary
+              <span class="update-quantity-link link-primary js-update-link
                 js-update-link-${matchingProduct.id}" data-product-id="${matchingProduct.id}"
               >
                 Update
@@ -191,6 +191,7 @@ export function renderOrderSummary() {
   document.querySelectorAll('.js-update-link')
     .forEach((link) => {
       link.addEventListener('click', () => {
+        console.log('hello');
         const {productId} = link.dataset;
         const container = document.
           querySelector(

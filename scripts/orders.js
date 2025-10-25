@@ -2,6 +2,7 @@ import { orders} from "../data/orders.js";
 import { formatCurrency } from "./utils/money.js";
 import { formatDateString } from "./utils/date.js";
 import {loadProductsFetch, getProduct } from "../data/products.js";
+import { addToCart, calculateCartQuantity } from "../data/cart.js";
 
 loadPage();
 
@@ -33,10 +34,16 @@ function renderOrdersGrid() {
           </div>
           <div class="product-delivery-date">Arriving on: ${deliveryDateString}</div>
           <div class="product-quantity">Quantity: ${quantity}</div>
-          <button class="buy-again-button button-primary">
+
+          <button class="buy-again-button 
+            button-primary js-buy-button"
+            data-product-id="${productId}"
+          >
             <img class="buy-again-icon" src="images/icons/buy-again.png" />
             <span class="buy-again-message">Buy it again</span>
           </button>
+
+
         </div>
 
         <div class="product-actions">
@@ -90,4 +97,16 @@ function renderOrdersGrid() {
 
   document.querySelector('.js-orders-grid')
     .innerHTML = ordersHTML;
+
+  document.querySelectorAll('.js-buy-button')
+    .forEach((button) => {
+      button.addEventListener('click', () => {
+        const {productId} = button.dataset;
+
+        addToCart(productId, 1);
+
+        document.querySelector('.js-cart-quantity')
+          .innerHTML = calculateCartQuantity();
+      });
+    })
 }
