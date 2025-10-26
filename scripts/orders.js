@@ -102,6 +102,9 @@ function renderOrdersGrid() {
   document.querySelector('.js-orders-grid')
     .innerHTML = ordersHTML;
 
+  document.querySelector('.js-cart-quantity')
+    .innerHTML = calculateCartQuantity();
+
   document.querySelectorAll('.js-buy-button')
     .forEach((button) => {
       button.addEventListener('click', () => {
