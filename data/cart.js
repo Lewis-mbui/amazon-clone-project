@@ -29,6 +29,11 @@ export function saveCartToStorage() {
   localStorage.setItem('cart', JSON.stringify(cart));
 }
 
+export function resetCart() {
+  cart = [];
+  saveCartToStorage();
+}
+
 export function addToCart(productId, quantity) {
   let matchingItem;
 
